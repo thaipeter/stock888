@@ -2,6 +2,28 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https:;
+        script-src 'self' 'unsafe-inline'
+            https://cdn.jsdelivr.net
+            https://cdnjs.cloudflare.com
+            https://unpkg.com
+            https://script.google.com
+            https://apis.google.com;
+        style-src 'self' 'unsafe-inline'
+            https://cdn.jsdelivr.net
+            https://cdnjs.cloudflare.com
+            https://fonts.googleapis.com;
+        font-src 'self'
+            https://fonts.gstatic.com
+            https://cdnjs.cloudflare.com;
+        connect-src 'self'
+            https://script.google.com
+            https://sheets.googleapis.com;
+        img-src 'self' data: https:;
+        frame-src https://script.google.com;
+    ">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>คลังอะไหล่เมาท์เทน</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
