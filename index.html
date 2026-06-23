@@ -7,22 +7,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js">
-// GAS_URL set by __GAS_URL__ above
-    /* ── GAS API Helper (GitHub Pages compatible) ── */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwVcL-cvscyHqLsNKzjTa8iTvCZfmUCSa-CqYaluF6T4dDtTffBsvOV1GmPLA_8_LQQ/exec';
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+/* ── GAS API Helper — ทำงานได้ทั้ง Apps Script และ GitHub Pages ── */
+const __GAS_URL__ = 'https://script.google.com/macros/s/AKfycbwVcL-cvscyHqLsNKzjTa8iTvCZfmUCSa-CqYaluF6T4dDtTffBsvOV1GmPLA_8_LQQ/exec'; // ← เปลี่ยนเป็น URL จริงตอน deploy บน GitHub
+
+const GAS_URL = (typeof __GAS_URL__ !== 'undefined' && __GAS_URL__ !== 'YOUR_GAS_DEPLOY_URL')
+  ? __GAS_URL__ : '';
 
 function gasCall(fn, args, onSuccess, onFailure) {
   if (!GAS_URL) {
-    // รันใน Apps Script ตรงๆ — ใช้ google.script.run
+    // รันใน Apps Script iframe ตรงๆ — ใช้ google.script.run
     if (typeof google !== 'undefined' && google.script && google.script.run) {
-      let runner = gasCall('withSuccessHandler', [onSuccess || function(]){});
+      let runner = google.script.run
+        .withSuccessHandler(onSuccess || function(){});
       if (onFailure) runner = runner.withFailureHandler(onFailure);
       runner[fn].apply(runner, args || []);
     }
     return;
   }
-  // รันบน GitHub Pages — ใช้ fetch
+  // รันบน GitHub Pages — ใช้ fetch POST ไปที่ GAS Web App
   fetch(GAS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
@@ -30,10 +34,10 @@ function gasCall(fn, args, onSuccess, onFailure) {
   })
   .then(r => r.json())
   .then(data => { if (onSuccess) onSuccess(data); })
-  .catch(err => { if (onFailure) onFailure(err); else console.error(fn, err); });
+  .catch(err => { if (onFailure) onFailure(err); else console.error('[gasCall]', fn, err); });
 }
 /* ── End GAS API Helper ── */
-</script>
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
@@ -6051,7 +6055,7 @@ p, span, div, li { color: inherit; }
            ══════════════════════════════════════ */
         function loadQRPending() {
             if (!currentUserProfile || currentUserProfile.role !== 'admin') return;
-            if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+            // gasCall จัดการ Apps Script / GitHub Pages อัตโนมัติ
             gasCall('withSuccessHandler', [function(rows]) {
                 const section  = document.getElementById('qrPendingSection');
                 const tbody    = document.getElementById('qrPendingBody');
