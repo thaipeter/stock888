@@ -1,0 +1,6 @@
+{
+  "name": "Smart Parts Tracker",
+  "description": "ระบบจัดการคลังอะไหล่และเครื่องมืออัจฉริยะ (Smart Warehouse Inventory & Tool Tracking) รองรับระบบเบิก ยืม-คืน สแกนคิวอาร์โค้ด และเชื่อมโยงฐานข้อมูล",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
